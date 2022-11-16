@@ -9,7 +9,6 @@ import com.citybuild.entities.Character;
 
 public class CityBuild extends ApplicationAdapter {
 	SpriteBatch batch;
-	InputMultiplexer inputMultiplexer;
 
 	// Textures
 	Texture player_texture;
@@ -20,16 +19,15 @@ public class CityBuild extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		inputMultiplexer = new InputMultiplexer();
 		player_texture = new Texture("character_1.png");
-		this.player = new Character(player_texture, "right");
-		inputMultiplexer.addProcessor(player);
+		this.player = new Character(player_texture, "up");
 	}
 
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(0, 0, 0, 1);
+		player.update();
 		batch.begin();
 		batch.draw(player,
 				player.getX(),

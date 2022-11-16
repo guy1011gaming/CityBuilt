@@ -6,8 +6,9 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-public class Character extends Sprite implements InputProcessor {
+public class Character extends Sprite {
     private boolean isWalking;
+    private float speed;
 
     public Character(Texture texture, float X, float Y, String direction) {
         super(texture);
@@ -22,6 +23,7 @@ public class Character extends Sprite implements InputProcessor {
         else if (direction == "right") {
             this.setRotation(90f);
         }
+        this.speed = 2f;
     }
 
     public Character(Texture texture, String direction) {
@@ -38,6 +40,11 @@ public class Character extends Sprite implements InputProcessor {
         else if (direction == "right") {
             this.setRotation(90f);
         }
+        this.speed = 2f;
+    }
+
+    public void update() {
+        this.processInput();
     }
 
     public void setRotation(String direction) {
@@ -56,6 +63,25 @@ public class Character extends Sprite implements InputProcessor {
 
     }
 
+    public void processInput() {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            this.setRotation("left");
+            this.walk();
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            this.setRotation("right");
+            this.walk();
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            this.setRotation("up");
+            this.walk();
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            this.setRotation("down");
+            this.walk();
+        }
+    }
+
     public void setWalking(boolean walking) {
         isWalking = walking;
     }
@@ -64,62 +90,18 @@ public class Character extends Sprite implements InputProcessor {
         return isWalking;
     }
 
-    @Override
-    public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.LEFT) {
-            this.setRotation("left");
-            this.setWalking(true);
+    public void walk() {
+        if (this.getRotation() == 0f) {
+            this.translateY(this.speed * -1f);
         }
-        else if (keycode == Input.Keys.RIGHT) {
-            this.setRotation("right");
-            this.setWalking(true);
+        else if (this.getRotation() == 180f) {
+            this.translateY(this.speed * 1f);
         }
-        else if (keycode == Input.Keys.UP) {
-            this.setRotation("up");
-            this.setWalking(true);
+        else if (this.getRotation() == 90f) {
+            this.translateX(this.speed * 1f);
         }
-        else if (keycode == Input.Keys.DOWN) {
-            this.setRotation("down");
-            this.setWalking(true);
+        else if (this.getRotation() == -90f) {
+            this.translateX(this.speed * -1f);
         }
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.LEFT || keycode == Input.Keys.RIGHT || keycode == Input.Keys.DOWN || keycode == Input.Keys.UP) {
-            this.setWalking(false);
-        }
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(float amountX, float amountY) {
-        return false;
     }
 }
